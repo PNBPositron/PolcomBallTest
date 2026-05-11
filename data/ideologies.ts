@@ -1,0 +1,208 @@
+export interface Ideology {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  relatedIdeologies: string[];
+}
+
+export const IDEOLOGIES: Record<string, Ideology> = {
+  anarchoTranshumanism: {
+    id: 'anarchoTranshumanism',
+    name: 'Anarcho-Transhumanism',
+    description: 'Combines anarchist principles with transhumanism and technological enhancement',
+    color: '#FF6B9D',
+    relatedIdeologies: ['transhumanism', 'anarchoCommunism', 'technoAnarchism'],
+  },
+  anarchoCommunism: {
+    id: 'anarchoCommunism',
+    name: 'Anarcho-Communism',
+    description: 'Advocates for a stateless, classless society based on collective ownership',
+    color: '#FF0000',
+    relatedIdeologies: ['anarchism', 'communism', 'socialism'],
+  },
+  anarchoCapitalism: {
+    id: 'anarchoCapitalism',
+    name: 'Anarcho-Capitalism',
+    description: 'Promotes free markets and property rights without state intervention',
+    color: '#FFFF00',
+    relatedIdeologies: ['libertarianism', 'capitalism', 'anarchism'],
+  },
+  transhumanism: {
+    id: 'transhumanism',
+    name: 'Transhumanism',
+    description: 'Advocates for human enhancement through technology and scientific advancement',
+    color: '#00FFFF',
+    relatedIdeologies: ['progressivism', 'posthumanism', 'technocracy'],
+  },
+  communism: {
+    id: 'communism',
+    name: 'Communism',
+    description: 'Seeks to establish a classless society with collective ownership of property',
+    color: '#AA0000',
+    relatedIdeologies: ['socialism', 'marxism', 'leninism'],
+  },
+  fascism: {
+    id: 'fascism',
+    name: 'Fascism',
+    description: 'Authoritarian ultranationalist political ideology emphasizing strong state',
+    color: '#000000',
+    relatedIdeologies: ['authoritarianism', 'nationalism', 'totalitarianism'],
+  },
+  libertarianism: {
+    id: 'libertarianism',
+    name: 'Libertarianism',
+    description: 'Emphasizes individual liberty and minimal state intervention',
+    color: '#CCFF00',
+    relatedIdeologies: ['liberalism', 'anarchoCapitalism', 'minarchism'],
+  },
+  socialism: {
+    id: 'socialism',
+    name: 'Socialism',
+    description: 'Advocates for collective or state ownership of the means of production',
+    color: '#FF6666',
+    relatedIdeologies: ['communism', 'socialDemocracy', 'marxism'],
+  },
+  capitalism: {
+    id: 'capitalism',
+    name: 'Capitalism',
+    description: 'Economic system based on private ownership and free markets',
+    color: '#00AA00',
+    relatedIdeologies: ['liberalism', 'conservatism', 'anarchoCapitalism'],
+  },
+  conservatism: {
+    id: 'conservatism',
+    name: 'Conservatism',
+    description: 'Advocates for traditional values and gradual social change',
+    color: '#0033CC',
+    relatedIdeologies: ['traditionalism', 'authoritarianism', 'nationalism'],
+  },
+  liberalism: {
+    id: 'liberalism',
+    name: 'Liberalism',
+    description: 'Supports individual rights, democracy, and free markets',
+    color: '#FF9900',
+    relatedIdeologies: ['progressivism', 'capitalism', 'democracy'],
+  },
+  authoritarianism: {
+    id: 'authoritarianism',
+    name: 'Authoritarianism',
+    description: 'Centralizes power in the hands of an authority that brooks little dissent',
+    color: '#333333',
+    relatedIdeologies: ['totalitarianism', 'autocracy', 'monarchy'],
+  },
+  progressivism: {
+    id: 'progressivism',
+    name: 'Progressivism',
+    description: 'Supports social and political reform and technological advancement',
+    color: '#FF99FF',
+    relatedIdeologies: ['liberalism', 'socialism', 'environmentalism'],
+  },
+  nationalism: {
+    id: 'nationalism',
+    name: 'Nationalism',
+    description: 'Prioritizes national identity and often seeks national independence',
+    color: '#CC0000',
+    relatedIdeologies: ['patriotism', 'conservatism', 'fascism'],
+  },
+  environmentalism: {
+    id: 'environmentalism',
+    name: 'Environmentalism',
+    description: 'Focuses on protection of the environment and sustainability',
+    color: '#00CC00',
+    relatedIdeologies: ['ecoSocialism', 'progressivism', 'bioregionalism'],
+  },
+  monarchism: {
+    id: 'monarchism',
+    name: 'Monarchism',
+    description: 'Supports monarchy as a form of government',
+    color: '#9900FF',
+    relatedIdeologies: ['conservatism', 'authoritarianism', 'traditionalism'],
+  },
+  democracy: {
+    id: 'democracy',
+    name: 'Democracy',
+    description: 'Advocates for government by the people through direct or representative means',
+    color: '#0066FF',
+    relatedIdeologies: ['liberalism', 'progressivism', 'socialism'],
+  },
+  anarchism: {
+    id: 'anarchism',
+    name: 'Anarchism',
+    description: 'Rejects all forms of involuntary hierarchical authority',
+    color: '#FF00FF',
+    relatedIdeologies: ['anarchoCommunism', 'anarchoCapitalism', 'mutualism'],
+  },
+  technocracy: {
+    id: 'technocracy',
+    name: 'Technocracy',
+    description: 'Advocates that society should be managed by technical experts',
+    color: '#00FFFF',
+    relatedIdeologies: ['authoritarianism', 'transhumanism', 'meritocracy'],
+  },
+  feminism: {
+    id: 'feminism',
+    name: 'Feminism',
+    description: 'Advocates for political, economic, and social equality of the sexes',
+    color: '#FF69B4',
+    relatedIdeologies: ['progressivism', 'socialism', 'egalitarianism'],
+  },
+  traditionalism: {
+    id: 'traditionalism',
+    name: 'Traditionalism',
+    description: 'Emphasizes adherence to traditional institutions and practices',
+    color: '#8B4513',
+    relatedIdeologies: ['conservatism', 'monarchy', 'religion'],
+  },
+  ecoSocialism: {
+    id: 'ecoSocialism',
+    name: 'Eco-Socialism',
+    description: 'Combines socialist economics with environmental concerns',
+    color: '#CC3333',
+    relatedIdeologies: ['socialism', 'environmentalism', 'anticapitalism'],
+  },
+  mutualism: {
+    id: 'mutualism',
+    name: 'Mutualism',
+    description: 'Anarchist ideology based on voluntary exchange and mutual aid',
+    color: '#FF8800',
+    relatedIdeologies: ['anarchism', 'cooperation', 'federalism'],
+  },
+  marxism: {
+    id: 'marxism',
+    name: 'Marxism',
+    description: 'Theoretical framework analyzing capitalism and predicting socialist revolution',
+    color: '#DD0000',
+    relatedIdeologies: ['communism', 'socialism', 'leninism'],
+  },
+  socialDemocracy: {
+    id: 'socialDemocracy',
+    name: 'Social Democracy',
+    description: 'Advocates democratic socialism and welfare state capitalism',
+    color: '#FF3333',
+    relatedIdeologies: ['socialism', 'democracy', 'liberalism'],
+  },
+  technoAnarchism: {
+    id: 'technoAnarchism',
+    name: 'Techno-Anarchism',
+    description: 'Combines anarchist principles with technological advancement',
+    color: '#FF00AA',
+    relatedIdeologies: ['anarchism', 'transhumanism', 'cybercommunism'],
+  },
+  posadism: {
+    id: 'posadism',
+    name: 'Posadism',
+    description: 'Satirical/absurdist ideology known for extreme rhetoric',
+    color: '#FF00FF',
+    relatedIdeologies: ['communism', 'satire', 'absurdism'],
+  },
+  anarchoNihilism: {
+    id: 'anarchoNihilism',
+    name: 'Anarcho-Nihilism',
+    description: 'Combines anarchism with nihilist rejection of meaning and hierarchy',
+    color: '#000000',
+    relatedIdeologies: ['anarchism', 'nihilism', 'existentialism'],
+  },
+};
+
+export const IDEOLOGIES_ARRAY = Object.values(IDEOLOGIES);
