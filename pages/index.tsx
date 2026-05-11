@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Head from 'next/head';
 import QuestionCard from '../components/QuestionCard';
 import ResultsView from '../components/ResultsView';
 import { QUESTIONS } from '../data/questions';
@@ -16,179 +15,108 @@ interface Result {
 export default function Home() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [showResults, setShowResults] = useState(false);
+  const [results, setResults] = useState<Result[] | null>(null);
 
   const handleAnswerSelect = (value: number) => {
-    setAnswers((prev) => ({
-      ...prev,
+    setAnswers({
+      ...answers,
       [QUESTIONS[currentQuestion].id]: value,
-    }));
-  };
+    });
 
-  const handleNext = () => {
     if (currentQuestion < QUESTIONS.length - 1) {
-      setCurrentQuestion((prev) => prev + 1);
+      setCurrentQuestion(currentQuestion + 1);
     } else {
       calculateResults();
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion((prev) => prev - 1);
     }
   };
 
   const calculateResults = () => {
     const scores: Record<string, number> = {};
 
-    // Initialize scores
-    Object.keys(IDEOLOGIES).forEach((key) => {
-      scores[key] = 0;
+    IDEOLOGIES.forEach((ideology) => {
+      scores[ideology.id] = 0;
     });
 
-    // Calculate scores based on answers
-    QUESTIONS.forEach((question) => {
-      const answer = answers[question.id] || 0;
-      Object.entries(question.ideologyWeights).forEach(([ideology, weight]) => {
-        if (scores[ideology] !== undefined) {
-          scores[ideology] += answer * weight;
+    Object.entries(answers).forEach(([questionId, answer]) => {
+      const question = QUESTIONS.find((q) => q.id === questionId);
+      if (!question) return;
+
+      Object.entries(question.ideologyWeights).forEach(([ideologyId, weight]) => {
+        if (scores[ideologyId] !== undefined) {
+          scores[ideologyId] += answer * weight;
         }
       });
     });
 
-    // Normalize scores to 0-100 range
-    const maxScore = Math.max(...Object.values(scores));
-    const minScore = Math.min(...Object.values(scores));
-    const range = maxScore - minScore || 1;
-
-    const results: Result[] = Object.entries(scores)
-      .map(([id, score]) => {
-        const ideology = IDEOLOGIES[id];
-        const normalized = ((score - minScore) / range) * 100;
-        return {
-          id,
-          name: ideology.name,
-          score: normalized,
-          description: ideology.description,
-          color: ideology.color,
-        };
-      })
+    const calculatedResults = IDEOLOGIES.map((ideology) => ({
+      id: ideology.id,
+      name: ideology.name,
+      score: Math.max(0, scores[ideology.id] || 0),
+      description: ideology.description,
+      color: ideology.color,
+    }))
       .sort((a, b) => b.score - a.score);
 
-    setShowResults(true);
+    setResults(calculatedResults);
   };
 
   const handleRestart = () => {
     setCurrentQuestion(0);
     setAnswers({});
-    setShowResults(false);
+    setResults(null);
   };
 
-  const progress = ((currentQuestion + 1) / QUESTIONS.length) * 100;
-  const currentQ = QUESTIONS[currentQuestion];
-  const selectedAnswer = answers[currentQ?.id];
+  if (results) {
+    return <ResultsView results={results} onRestart={handleRestart} />;
+  }
 
   return (
-    <>
-      <Head>
-        <title>Polcomballs Political Test</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="description"
-          content="Interactive political ideology test based on polcomballs"
-        />
-      </Head>
-
-      <div className="container">
-        <div className="header">
-          <h1>🎯 Polcomballs Political Test</h1>
-          <p>Discover which political ideology aligns with your values</p>
-        </div>
-
-        {!showResults ? (
-          <>
-            <div className="progress-container">
-              <div className="progress-info">
-                <span>Progress</span>
-                <span>{currentQuestion + 1} / {QUESTIONS.length}</span>
-              </div>
-              <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {currentQ && (
-              <QuestionCard
-                questionNumber={currentQuestion + 1}
-                totalQuestions={QUESTIONS.length}
-                question={currentQ}
-                selectedAnswer={selectedAnswer}
-                onAnswerSelect={handleAnswerSelect}
-              />
-            )}
-
-            <div className="btn-group">
-              <button
-                className="btn btn-primary"
-                onClick={handlePrevious}
-                disabled={currentQuestion === 0}
-                style={{ opacity: currentQuestion === 0 ? 0.5 : 1 }}
-              >
-                ← Previous
-              </button>
-              <button
-                className="btn"
-                onClick={handleNext}
-                disabled={selectedAnswer === undefined && currentQuestion === 0}
-                style={{ opacity: selectedAnswer === undefined ? 0.5 : 1 }}
-              >
-                {currentQuestion === QUESTIONS.length - 1 ? 'See Results' : 'Next'} →
-              </button>
-            </div>
-          </>
-        ) : (
-          <ResultsView results={Object.values(calculateResults())} onRestart={handleRestart} />
-        )}
+    <div className="container">
+      <div className="header">
+        <h1>🎭 Polcomballs Political Test</h1>
+        <p>Discover which political ideology aligns with your values</p>
       </div>
-    </>
+
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{
+            width: `${((currentQuestion + 1) / QUESTIONS.length) * 100}%`,
+          }}
+        ></div>
+      </div>
+
+      <QuestionCard
+        questionNumber={currentQuestion + 1}
+        totalQuestions={QUESTIONS.length}
+        question={QUESTIONS[currentQuestion]}
+        selectedAnswer={answers[QUESTIONS[currentQuestion].id] || null}
+        onAnswerSelect={handleAnswerSelect}
+      />
+
+      <div className="navigation">
+        <button
+          className="btn btn-secondary"
+          onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
+          disabled={currentQuestion === 0}
+        >
+          ← Previous
+        </button>
+        <span className="question-status">
+          {currentQuestion + 1} / {QUESTIONS.length}
+        </span>
+        <button
+          className="btn btn-secondary"
+          onClick={() => {
+            if (currentQuestion < QUESTIONS.length - 1) {
+              setCurrentQuestion(currentQuestion + 1);
+            }
+          }}
+          disabled={currentQuestion === QUESTIONS.length - 1}
+        >
+          Next →
+        </button>
+      </div>
+    </div>
   );
-
-  function calculateResults(): Result[] {
-    const scores: Record<string, number> = {};
-
-    Object.keys(IDEOLOGIES).forEach((key) => {
-      scores[key] = 0;
-    });
-
-    QUESTIONS.forEach((question) => {
-      const answer = answers[question.id] || 0;
-      Object.entries(question.ideologyWeights).forEach(([ideology, weight]) => {
-        if (scores[ideology] !== undefined) {
-          scores[ideology] += answer * weight;
-        }
-      });
-    });
-
-    const maxScore = Math.max(...Object.values(scores));
-    const minScore = Math.min(...Object.values(scores));
-    const range = maxScore - minScore || 1;
-
-    return Object.entries(scores)
-      .map(([id, score]) => {
-        const ideology = IDEOLOGIES[id];
-        const normalized = ((score - minScore) / range) * 100;
-        return {
-          id,
-          name: ideology.name,
-          score: normalized,
-          description: ideology.description,
-          color: ideology.color,
-        };
-      })
-      .sort((a, b) => b.score - a.score);
-  }
 }
